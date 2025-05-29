@@ -1,4 +1,8 @@
 import { useState } from "react";
+import Header from "@/components/sections/Header";
+import HeroSection from "@/components/sections/HeroSection";
+import { useSearch } from "@/hooks/useSearch";
+import { bookingSteps, promotions, reviews } from "@/constants/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,23 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Icon from "@/components/ui/icon";
 
 const Index = () => {
-  const [searchData, setSearchData] = useState({
-    region: "",
-    date: "",
-    adults: "",
-    children: "",
-  });
-
+  const { searchData, updateSearchData } = useSearch();
   const [email, setEmail] = useState("");
 
   const bookingSteps = [
@@ -92,146 +83,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <Icon name="MapPin" className="text-primary" size={32} />
-              <span className="text-2xl font-bold text-gray-900">
-                EventSpace
-              </span>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <a
-                href="#promotions"
-                className="text-gray-700 hover:text-primary transition-colors"
-              >
-                Акции
-              </a>
-              <a
-                href="#search"
-                className="text-gray-700 hover:text-primary transition-colors"
-              >
-                Поиск
-              </a>
-              <a
-                href="#booking"
-                className="text-gray-700 hover:text-primary transition-colors"
-              >
-                Управление бронированием
-              </a>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/10 via-blue-50 to-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Найдите идеальное место
-              <br />
-              <span className="text-primary">для вашего события</span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Бронируйте площадки для мероприятий быстро и удобно. Более 1000
-              локаций по всей России.
-            </p>
-          </div>
-
-          {/* Search Form */}
-          <Card className="max-w-4xl mx-auto shadow-lg" id="search">
-            <CardHeader>
-              <CardTitle className="text-center">Найти площадку</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Регион
-                  </label>
-                  <Select
-                    value={searchData.region}
-                    onValueChange={(value) =>
-                      setSearchData({ ...searchData, region: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите регион" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="moscow">Москва</SelectItem>
-                      <SelectItem value="spb">Санкт-Петербург</SelectItem>
-                      <SelectItem value="novosibirsk">Новосибирск</SelectItem>
-                      <SelectItem value="ekaterinburg">Екатеринбург</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Дата мероприятия
-                  </label>
-                  <Input
-                    type="date"
-                    value={searchData.date}
-                    onChange={(e) =>
-                      setSearchData({ ...searchData, date: e.target.value })
-                    }
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Взрослые
-                  </label>
-                  <Select
-                    value={searchData.adults}
-                    onValueChange={(value) =>
-                      setSearchData({ ...searchData, adults: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Количество" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 50 }, (_, i) => (
-                        <SelectItem key={i + 1} value={String(i + 1)}>
-                          {i + 1}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Дети</label>
-                  <Select
-                    value={searchData.children}
-                    onValueChange={(value) =>
-                      setSearchData({ ...searchData, children: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Количество" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 50 }, (_, i) => (
-                        <SelectItem key={i} value={String(i)}>
-                          {i}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-white py-3 text-lg">
-                <Icon name="Search" className="mr-2" />
-                Найти площадки
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+      <HeroSection
+        searchData={searchData}
+        onUpdateSearchData={updateSearchData}
+      />
 
       {/* Booking Algorithm */}
       <section className="py-20 bg-gray-50" id="booking">
